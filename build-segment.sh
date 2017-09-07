@@ -18,6 +18,7 @@ sleep 5
 
 docker exec reach.$NETWORK ./rpc.sh db_param set b:fs_agent_gateway b:agents.$NETWORK
 docker exec reach.$NETWORK ./rpc.sh db_param set b:fs_outgoing_gateway b:agents.$NETWORK
+docker exec reach.$NETWORK ./rpc.sh db_param set b:call_record_template b:http_cache://http://rr.$NETWORK:9090/records/~s.wav
 
 cd busytone && BRANCH=reach-rework ./build.sh && ./run.sh && cd ../
 
