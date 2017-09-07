@@ -15,11 +15,15 @@ handle_reply(ok, Req0, S=#state{}) ->
 handle_data(Data) ->
 	Repo = path([pull_request, base, repo, name], Data),
 	Action = path([action], Data),
-	handle_action(Action, Repo, Data),
+	Pr = path([pull_request, number], Data),
+	handle_action(Action, Repo, Pr, Data),
 	{ok, <<"ok">>}.
 
-handle_action(Action, Repo, _Data) ->
-	lager:notice("action:~p repo:~p", [Action, Repo]).
+handle_action(<<"open">>, <<"reach3">>, Pr, _Data) ->
+	ok;
+
+handle_action(Action, Repo, Pr, _Data) ->
+	lager:notice("action:~p repo:~p pr:~p", [Action, Repo, Pr]).
 
 path(_, undefined) -> undefined;
 path([], M) -> M;
