@@ -2,16 +2,18 @@
 PR=$1
 if [ -z $PR ]
 then
-	echo Usage: $0 PR_NUMBER
-	exit
+	export NETWORK=ezuce
+	REACH_BRANCH=master
+else
+	export NETWORK=pr-$PR
+	REACH_BRANCH=pull/$PR/head
 fi
-export NETWORK=pr-$1
 unset NODE
 
 cd ~/docker
 docker network create $NETWORK || true
 
-cd reach3 && BRANCH=pull/$PR/head ./build.sh && ./run.sh && cd ../
+cd reach3 && BRANCH=$REACH_BRANCH ./build.sh && ./run.sh && cd ../
 
 echo wait reach node to boot up
 sleep 5
