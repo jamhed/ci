@@ -2,7 +2,17 @@
 -export([init/2]).
 -record(state, {}).
 
-init(Req0, _InitState) ->
+fmt(Tmpl, Args) -> lists:flatten(io_lib:format(Tmpl, Args)).
+
+pr_path(Number) when is_binary(Number) -> pr_path(erlang:binary_to_integer(Number));
+pr_path(Number) when is_integer(Number) -> fmt("~s/pr/~p", [os:getenv("HOME"), Number]).
+ci_path() -> fmt("~s/ci", [os:getenv("HOME")]).
+
+init(#{ method := <<"GET">>, path := <<"/pr/", Pr/binary>> }=Req0, _InitState) ->
+	lager:notice("get:~p", [pr_path(Pr)]),
+	{ok, cowboy_req:reply(200, #{}, <<>>, Req0), _InitState};
+
+init(#{ method := <<"POST">> }=Req0, _InitState) ->
 	{ok, Data, Req} = cowboy_req:read_body(Req0),
 	handle_reply(handle_data(jiffy:decode(Data, [return_maps])), Req, #state{}).
 
@@ -20,6 +30,8 @@ handle_data(Data) ->
 	{ok, <<"ok">>}.
 
 handle_action(<<"open">>, <<"reach3">>, Pr, _Data) ->
+	lager:notice("build and test reach3 pr:~p", [Pr]),
+	exec:run(fmt("cd ~s && ./build-segment.sh ~s", [ci_path(), Pr]), [{stdout, pr_path(Pr)}]),
 	ok;
 
 handle_action(Action, Repo, Pr, _Data) ->
