@@ -1,5 +1,6 @@
 #!/bin/sh -e
 PR=$1
+COMMIT=$2
 if [ -z $PR ]
 then
 	export NETWORK=ezuce
@@ -9,6 +10,10 @@ else
 	REACH_BRANCH=pull/$PR/head
 fi
 unset NODE
+
+[ -n $COMMIT ] && curl \
+	-X POST https://api.github.com/repos/ezuce/reach3/statuses/$COMMIT&access_token=$TOKEN \
+	-d "{ \"state\": \"pending\", \"target_url\": \"https://docker.ezuce.com/ci/pr/$PR\" }"
 
 cd ~/docker
 docker network create $NETWORK || true
