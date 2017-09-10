@@ -36,8 +36,10 @@ docker exec reach.$NETWORK ./rpc.sh db_param set b:fs_outgoing_gateway b:agents.
 docker exec reach.$NETWORK ./rpc.sh db_param set b:call_record_template b:http_cache://http://rr.$NETWORK:9090/records/~s.wav
 
 cd busytone && BRANCH=reach-rework ./build.sh && ./run.sh && cd ../
+# lock freeswitch master branch version
+cd freeswitch-reach3 && COMMIT=2362cb4e58985579cce88b1b81479b0f4cfcb2c1 ./build.sh && ./run.sh && cd ../
 
-for component in freeswitch-reach3 agents reach-ui rr
+for component in agents reach-ui rr
 do
 	cd $component && ./build.sh && ./run.sh && cd ../
 done
