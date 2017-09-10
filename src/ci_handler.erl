@@ -30,9 +30,9 @@ handle_data(Data) ->
 	handle_action(Action, Repo, Pr, Data),
 	{ok, <<"ok">>}.
 
-handle_action(<<"open">>, <<"reach3">>, Pr, _Data) ->
+handle_action(<<"opened">>, <<"reach3">>, Pr, _Data) ->
 	lager:notice("build and test reach3 pr:~p", [Pr]),
-	exec:run(fmt("cd ~s && ./build-segment.sh ~s", [ci_path(), Pr]), [{stdout, pr_path(Pr)}]),
+	exec:run(fmt("cd ~s && ./build-segment.sh ~s", [ci_path(), Pr]), [{stdout, pr_path(Pr)}, {stderr, pr_path(Pr)}]),
 	ok;
 
 handle_action(Action, Repo, Pr, _Data) ->
