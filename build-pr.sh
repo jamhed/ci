@@ -21,7 +21,7 @@ function set_status() {
 	[ -n $COMMIT ] && curl -s -X POST \
 		-H "Content-Type: application/json" \
 		-d "{ \"state\": \"$1\", \"target_url\": \"https://docker.ezuce.com/ci/pr/$PR\", \"context\": \"ReachCI\" }" \
-		"https://api.github.com/repos/ezuce/reach3/statuses/$COMMIT?access_token=$TOKEN"
+		"https://api.github.com/repos/ezuce/reach3/statuses/$COMMIT?access_token=$TOKEN" > /dev/null
 }
 
 cd ~/docker
