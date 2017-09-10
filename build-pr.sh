@@ -47,7 +47,7 @@ do
 done
 
 echo wait fs to boot up
-sleep 20
+sleep 40
 
 echo running test suite
 docker exec busytone.$NETWORK ./rpc.sh test_sup run
