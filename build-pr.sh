@@ -12,7 +12,7 @@ fi
 unset NODE
 unset NAME
 # supress versbose build log messages
-export BUILD_ARGS=-q
+export BUILD_FLAGS=-q
 
 echo BUILD PR:$PR COMMIT:$COMMIT
 
