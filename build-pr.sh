@@ -11,6 +11,8 @@ else
 fi
 unset NODE
 unset NAME
+# supress versbose build log messages
+export BUILD_ARGS=-q
 
 echo BUILD PR:$PR COMMIT:$COMMIT
 
