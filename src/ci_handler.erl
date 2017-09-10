@@ -33,7 +33,7 @@ handle_data(Data) ->
 handle_action(<<"opened">>, <<"reach3">>, Pr, Data) ->
 	Commit = path([pull_request, head, sha], Data),
 	lager:notice("build and test reach3 pr:~p commit:~p", [Pr, Commit]),
-	exec:run(fmt("cd ~s && ./build-segment.sh ~p ~s", [ci_path(), Pr, Commit]), [{stdout, pr_path(Pr)}, {stderr, pr_path(Pr)}]),
+	exec:run(fmt("cd ~s && ./build-segment.sh ~p ~s 2>&1", [ci_path(), Pr, Commit]), [{stdout, pr_path(Pr)}]),
 	ok;
 
 handle_action(Action, Repo, Pr, _Data) ->

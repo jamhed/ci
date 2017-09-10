@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 PR=$1
 COMMIT=$2
 if [ -z $PR ]
@@ -10,13 +10,21 @@ else
 	REACH_BRANCH=pull/$PR/head
 fi
 unset NODE
+unset NAME
 
-[ -n $COMMIT ] && curl \
-	-X POST https://api.github.com/repos/ezuce/reach3/statuses/$COMMIT&access_token=$TOKEN \
-	-d "{ \"state\": \"pending\", \"target_url\": \"https://docker.ezuce.com/ci/pr/$PR\" }"
+echo BUILD PR:$PR COMMIT:$COMMIT
+
+function set_status() {
+	echo set status $1
+	[ -n $COMMIT ] && curl -s -X POST \
+		-H "Content-Type: application/json" \
+		-d "{ \"state\": \"$1\", \"target_url\": \"https://docker.ezuce.com/ci/pr/$PR\", \"context\": \"ReachCI\" }" \
+		"https://api.github.com/repos/ezuce/reach3/statuses/$COMMIT?access_token=$TOKEN"
+}
 
 cd ~/docker
 docker network create $NETWORK || true
+set_status pending
 
 cd reach3 && BRANCH=$REACH_BRANCH ./build.sh && ./run.sh && cd ../
 
@@ -33,3 +41,27 @@ for component in freeswitch-reach3 agents reach-ui rr
 do
 	cd $component && ./build.sh && ./run.sh && cd ../
 done
+
+echo wait fs to boot up
+sleep 15
+
+echo running test suite
+docker exec busytone.$NETWORK ./rpc.sh test_sup run
+
+[ -z $PR ] && exit
+
+RUNNING=$(docker ps | grep -c pr-3) && true
+SUCCESS=$(grep -c ',ok}' ~/pr/$PR) && true
+FAILURE=$(grep -c 'not_ok}' ~/pr/$PR) && true
+if [ "$RUNNING" = "6" ]
+then
+	if [ $FAILURE = 0 ]
+	then
+		set_status success
+	else
+		set_status error
+	fi
+else
+	set_status failure
+fi
+echo SUCCESS:$SUCCESS FAILURE:$FAILURE
