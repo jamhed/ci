@@ -9,8 +9,9 @@ pr_path(Number) when is_integer(Number) -> fmt("~s/pr/~p", [os:getenv("HOME"), N
 ci_path() -> fmt("~s/ci", [os:getenv("HOME")]).
 
 init(#{ method := <<"GET">>, path := <<"/pr/", Pr/binary>> }=Req0, _InitState) ->
-	lager:notice("get:~p", [pr_path(Pr)]),
-	{ok, cowboy_req:reply(200, #{}, <<>>, Req0), _InitState};
+	Report = pr_path(Pr),
+	lager:notice("get report:~p", [Report]),
+	{ok, cowboy_req:reply(200, #{ <<"content-type">> => <<"text/plain">>}, {sendfile, 0, filelib:file_size(Report), Report}, Req0), _InitState};
 
 init(#{ method := <<"POST">> }=Req0, _InitState) ->
 	{ok, Data, Req} = cowboy_req:read_body(Req0),
