@@ -50,7 +50,7 @@ docker exec busytone.$NETWORK ./rpc.sh test_sup run
 
 [ -z $PR ] && exit
 
-RUNNING=$(docker ps | grep -c pr-3) && true
+RUNNING=$(docker ps | grep -c $NETWORK) && true
 SUCCESS=$(grep -c ',ok}' ~/pr/$PR) && true
 FAILURE=$(grep -c 'not_ok}' ~/pr/$PR) && true
 if [ "$RUNNING" = "6" ]
