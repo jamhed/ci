@@ -55,7 +55,7 @@ SUCCESS=$(grep -c ',ok}' ~/pr/$PR) && true
 FAILURE=$(grep -c 'not_ok}' ~/pr/$PR) && true
 if [ "$RUNNING" = "6" ]
 then
-	if [ $FAILURE = 0 ]
+	if [ "$FAILURE" = "0" ] && [ "$SUCCESS" -gt "0" ]
 	then
 		set_status success
 	else
