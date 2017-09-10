@@ -30,10 +30,15 @@ handle_data(Data) ->
 	handle_action(Action, Repo, Pr, Data),
 	{ok, <<"ok">>}.
 
-handle_action(<<"opened">>, <<"reach3">>, Pr, Data) ->
+handle_action(Action, <<"reach3">>, Pr, Data) when Action =:= <<"opened">>; Action =:= <<"synchronize">> ->
 	Commit = path([pull_request, head, sha], Data),
 	lager:notice("build and test reach3 pr:~p commit:~p", [Pr, Commit]),
-	exec:run(fmt("cd ~s && ./build-segment.sh ~p ~s 2>&1", [ci_path(), Pr, Commit]), [{stdout, pr_path(Pr)}]),
+	exec:run(fmt("cd ~s && ./build-pr.sh ~p ~s 2>&1", [ci_path(), Pr, Commit]), [{stdout, pr_path(Pr)}]),
+	ok;
+
+handle_action(<<"closed">>, <<"reach3">>, Pr, _Data) ->
+	lager:notice("clear pr:~p", [Pr]),
+	exec:run(fmt("cd ~s && ./clear-pr.sh ~p 2>&1", [ci_path(), Pr]), []),
 	ok;
 
 handle_action(Action, Repo, Pr, _Data) ->
