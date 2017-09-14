@@ -15,10 +15,11 @@ init([]) ->
 	{ok, #state{}}.
 handle_cast(_Msg, S=#state{}) -> {noreply, S}.
 handle_info({stdout, _Pid, Msg}, S=#state{}) ->
-	lager:info("stdout:~n~s", [chomp(Msg)]),
+	lager:info("~p", [Msg]),
+	[ lager:info("stdout: ~s", [Line]) || Line <- binary:split(chomp(Msg), <<"\n">>, [global]) ],
 	{noreply, S};
 handle_info({stderr, _Pid, Msg}, S=#state{}) ->
-	lager:error("stderr:~n~s", [chomp(Msg)]),
+	[ lager:error("stderr: ~s", [Line]) || Line <- binary:split(chomp(Msg), <<"\n">>, [global]) ],
 	{noreply, S}.
 handle_call(_Request, _From, S=#state{}) -> {reply, ok, S}.
 terminate(_Reason, _S) -> ok.
