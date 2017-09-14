@@ -33,12 +33,14 @@ handle_data(Data) ->
 handle_action(Action, <<"reach3">>, Pr, Data) when Action =:= <<"opened">>; Action =:= <<"synchronize">> ->
 	Commit = path([pull_request, head, sha], Data),
 	lager:notice("build and test reach3 pr:~p commit:~p", [Pr, Commit]),
-	exec:run(fmt("cd ~s && ./build-pr.sh ~p ~s 2>&1", [ci_path(), Pr, Commit]), [{stdout, pr_path(Pr)}]),
+	Pid = erlang:whereis(ci_logger),
+	exec:run(fmt("cd ~s && ./build-pr.sh ~p ~s", [ci_path(), Pr, Commit]), [{stdout, pr_path(Pr)}, {stderr, Pid}]),
 	ok;
 
-handle_action(<<"closed">>, <<"reach3">>, Pr, _Data) ->
-	lager:notice("clear pr:~p", [Pr]),
-	exec:run(fmt("cd ~s && ./clear-pr.sh ~p 2>&1", [ci_path(), Pr]), []),
+handle_action(<<"closed">>, Repo, Pr, _Data) ->
+	lager:notice("close pr:~p repo:~s", [Pr, Repo]),
+	Pid = erlang:whereis(ci_logger),
+	exec:run(fmt("cd ~s && ./close-pr.sh ~p ~s", [ci_path(), Pr, Repo]), [{stderr, Pid}, {stdout, Pid}]),
 	ok;
 
 handle_action(Action, Repo, Pr, _Data) ->
