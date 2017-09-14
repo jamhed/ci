@@ -42,7 +42,8 @@ handle_action(<<"closed">>, <<"reach3">>, Pr, _Data) ->
 	ok;
 
 handle_action(Action, Repo, Pr, _Data) ->
-	lager:notice("action:~p repo:~p pr:~p", [Action, Repo, Pr]).
+	lager:notice("action:~p repo:~p pr:~p", [Action, Repo, Pr]),
+	ok.
 
 path(_, undefined) -> undefined;
 path([], M) -> M;
