@@ -3,6 +3,9 @@ PR=$1
 REPO=$2
 [ -z $PR ] && exit
 
+unset NAME
+unset NODE
+
 if [ $REPO = "reach3" ]
 then
 	NETWORK=pr-$PR
