@@ -15,7 +15,6 @@ init([]) ->
 	{ok, #state{}}.
 handle_cast(_Msg, S=#state{}) -> {noreply, S}.
 handle_info({stdout, _Pid, Msg}, S=#state{}) ->
-	lager:info("~p", [Msg]),
 	[ lager:info("stdout: ~s", [Line]) || Line <- binary:split(chomp(Msg), <<"\n">>, [global]) ],
 	{noreply, S};
 handle_info({stderr, _Pid, Msg}, S=#state{}) ->
