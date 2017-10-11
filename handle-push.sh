@@ -8,7 +8,7 @@ unset NODE
 
 if [ $REPO = "reach3" ] && [ $BRANCH = "refs/heads/master" ]
 then
-	docker exec reach.ezuce bash -c 'cd reach && git pull origin master'
+	docker exec reach.ezuce bash -c 'cd reach && git fetch && git reset --hard origin/master'
 else
 	echo skip $REPO $BRANCH
 fi
