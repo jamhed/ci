@@ -18,11 +18,11 @@ function set_status() {
 if [ $REPO = "ezuce/reach3" ] && [ $BRANCH = "refs/heads/master" ]
 then
 	set_status pending
-	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_status ok
+	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_status success
 elif [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
 then
 	set_status pending
-	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_status ok
+	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_status success
 else
 	echo skip $REPO $BRANCH
 fi
