@@ -24,11 +24,11 @@ function set_success() {
 if [ $REPO = "ezuce/reach3" ] && [ $BRANCH = "refs/heads/master" ]
 then
 	ID=$(create_deployment)
-	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_success ID
+	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_success $ID
 elif [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
 then
 	ID=$(create_deployment)
-	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_success ID
+	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_success $ID
 else
 	echo skip $REPO $BRANCH
 fi
