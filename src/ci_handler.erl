@@ -32,15 +32,14 @@ handle_reply(ok, Req0, S=#state{}) ->
 	{ok, cowboy_req:reply(404, #{}, <<>>, Req0), S}.
 
 handle_push(Data) ->
-	Repo = path([repository, name], Data),
+	Repo = path([repository, full_name], Data),
 	Branch = path([ref], Data),
 	Commit = path(['after'], Data),
 	handle_push(Repo, Branch, Commit, Data).
 
 handle_push(Repo, Branch, Commit, Data) ->
 	Pid = erlang:whereis(ci_logger),
-	ApiUrl = path([repository, url], Data),
-	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s ~s", [ci_path(), Repo, Branch, Commit, ApiUrl]), [{stderr, Pid}, {stdout, Pid}]),
+	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s", [ci_path(), Repo, Branch, Commit]), [{stderr, Pid}, {stdout, Pid}]),
 	{ok, <<"ok">>}.
 
 handle_pr(Data) ->
