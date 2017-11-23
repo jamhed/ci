@@ -39,8 +39,8 @@ handle_push(Data) ->
 
 handle_push(Repo, Branch, Commit, Data) ->
 	Pid = erlang:whereis(ci_logger),
-	StatusesUrl = path([repository, statuses_url], Data),
-	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s ~s", [ci_path(), Repo, Branch, Commit, StatusesUrl]), [{stderr, Pid}, {stdout, Pid}]),
+	ApiUrl = path([repository, url], Data),
+	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s ~s", [ci_path(), Repo, Branch, Commit, ApiUrl]), [{stderr, Pid}, {stdout, Pid}]),
 	{ok, <<"ok">>}.
 
 handle_pr(Data) ->

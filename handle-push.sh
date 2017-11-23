@@ -13,7 +13,7 @@ function set_status() {
 	[ -n $COMMIT ] && [ -n $URL ] && curl -s -X POST \
 		-H "Content-Type: application/json" \
 		-d "{ \"state\": \"$1\", \"context\": \"Docker Deploy\" }" \
-		"$URL?access_token=$TOKEN"
+		"$URL/statuses/$COMMIT?access_token=$TOKEN"
 }
 
 if [ $REPO = "reach3" ] && [ $BRANCH = "refs/heads/master" ]
