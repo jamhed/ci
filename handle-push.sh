@@ -7,22 +7,28 @@ COMMIT=$3
 unset NAME
 unset NODE
 
-function set_status() {
-	echo set status $1
+function create_deployment() {
 	[ -n $COMMIT ] && curl -s -X POST \
 		-H "Content-Type: application/json" \
-		-d "{ \"state\": \"$1\", \"context\": \"Docker Deploy\" }" \
-		"https://api.github.com/repos/$REPO/statuses/$COMMIT?access_token=$TOKEN"
+		-d "{ \"ref\": \"$COMMIT\", \"payload\": \"Docker Deploy\" }" \
+		"https://api.github.com/repos/$REPO/deployments?access_token=$TOKEN" | jq '.id'
+}
+
+function set_success() {
+	[ -n $COMMIT ] && curl -s -X POST \
+		-H "Content-Type: application/json" \
+		-d "{ \"state\": \"success\", \"context\": \"Docker Deploy\" }" \
+		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN"
 }
 
 if [ $REPO = "ezuce/reach3" ] && [ $BRANCH = "refs/heads/master" ]
 then
-	set_status pending
-	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_status success
+	ID=$(create_deployment)
+	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_success ID
 elif [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
 then
-	set_status pending
-	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_status success
+	ID=$(create_deployment)
+	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_success ID
 else
 	echo skip $REPO $BRANCH
 fi
