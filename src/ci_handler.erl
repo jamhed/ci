@@ -34,7 +34,7 @@ handle_reply(ok, Req0, S=#state{}) ->
 handle_push(Data) ->
 	Repo = path([repository, name], Data),
 	Branch = path([ref], Data),
-	Commit = path([after], Data),
+	Commit = path(['after'], Data),
 	StatusesUrl = path([repository, statuses_url], Data)
 	handle_push(Repo, Branch, Commit, Data).
 
