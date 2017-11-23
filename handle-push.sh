@@ -14,21 +14,21 @@ function create_deployment() {
 		"https://api.github.com/repos/$REPO/deployments?access_token=$TOKEN" | jq '.id'
 }
 
-function set_success() {
+function set_status() {
 	[ -n $COMMIT ] && curl -s -X POST \
 		-H "Content-Type: application/json" \
-		-d "{ \"state\": \"success\", \"context\": \"Docker Deploy\" }" \
+		-d "{ \"state\": \"$2\", \"context\": \"Docker Deploy\" }" \
 		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN"
 }
 
 if [ $REPO = "ezuce/reach3" ] && [ $BRANCH = "refs/heads/master" ]
 then
 	ID=$(create_deployment)
-	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_success $ID
+	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
 elif [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
 then
 	ID=$(create_deployment)
-	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_success $ID
+	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
 else
 	echo skip $REPO $BRANCH
 fi
