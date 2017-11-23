@@ -37,7 +37,7 @@ handle_push(Data) ->
 	Commit = path(['after'], Data),
 	handle_push(Repo, Branch, Commit, Data).
 
-handle_push(Repo, Branch, Commit, Data) ->
+handle_push(Repo, Branch, Commit, _Data) ->
 	Pid = erlang:whereis(ci_logger),
 	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s", [ci_path(), Repo, Branch, Commit]), [{stderr, Pid}, {stdout, Pid}]),
 	{ok, <<"ok">>}.
