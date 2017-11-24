@@ -1,16 +1,16 @@
 -module(ci_handler).
--export([init/2]).
+-export([init/2, path/0]).
 -record(state, {}).
 
 fmt(Tmpl, Args) -> lists:flatten(io_lib:format(Tmpl, Args)).
 
-pr_path(Number) when is_binary(Number) -> pr_path(erlang:binary_to_integer(Number));
-pr_path(Number) when is_integer(Number) -> fmt("~s/pr/~p", [os:getenv("HOME"), Number]).
 ci_path() -> fmt("~s/ci", [os:getenv("HOME")]).
+path() -> fmt("~s/commit", [os:getenv("HOME")]).
+path(Commit) -> fmt("~s/commit/~s", [os:getenv("HOME"), Commit]).
 
-init(#{ method := <<"GET">>, path := <<"/pr/", Pr/binary>> }=Req0, _InitState) ->
-	Report = pr_path(Pr),
-	lager:notice("get report:~p", [Report]),
+init(#{ method := <<"GET">>, path := <<"/commit/", Commit/binary>> }=Req0, _InitState) ->
+	Report = path(Commit),
+	lager:notice("get commit report:~p", [Report]),
 	{ok, cowboy_req:reply(200, #{ <<"content-type">> => <<"text/plain">>}, {sendfile, 0, filelib:file_size(Report), Report}, Req0), _InitState};
 
 init(#{ method := <<"POST">> }=Req0, _InitState) ->
@@ -48,13 +48,11 @@ handle_pr(Data) ->
 
 handle_push(Repo, Branch, Commit, _Data) ->
 	lager:notice("push repo:~s branch:~s commit:~s", [Repo, Branch, Commit]),
-	Pid = erlang:whereis(ci_logger),
-	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s", [ci_path(), Repo, Branch, Commit]), [{stderr, Pid}, {stdout, Pid}]).
+	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s", [ci_path(), Repo, Branch, Commit]), make_writer(Commit)).
 
 handle_pr(Action, Repo, Pr, Commit, _Data) ->
 	lager:notice("~s pr:~p repo:~s", [Action, Pr, Repo]),
-	Pid = erlang:whereis(ci_logger),
-	exec:run(fmt("cd ~s && ./handle-pr.sh ~s ~p ~s ~s", [ci_path(), Action, Pr, Repo, Commit]), [{stderr, Pid}, {stdout, Pid}]).
+	exec:run(fmt("cd ~s && ./handle-pr.sh ~s ~p ~s ~s", [ci_path(), Action, Pr, Repo, Commit]), make_writer(Commit)).
 
 path(_, undefined) -> undefined;
 path([], M) -> M;
@@ -62,3 +60,23 @@ path([K|Rest], M) -> path(Rest, maps:get(a2b(K), M, undefined)).
 
 a2b(A) when is_atom(A) -> erlang:atom_to_binary(A, utf8);
 a2b(A) -> A.
+
+make_writer(Commit) ->
+	Writer = writer(Commit),
+	[{stderr, Writer}, {stdout, Writer}].
+
+writer(Commit) ->
+	fun(Stream, _OsPid, Data) ->
+		log(Stream, Data),
+		{ok, Device} = file:open(path(Commit), [append, raw]),
+		file:write(Device, Data),
+		file:close(Device)
+	end.
+
+chomp(Str) when is_binary(Str) ->
+	binary:part(Str, {0, erlang:size(Str)-1}).
+
+log(stdout, Data) ->
+	[ lager:info("~s", [Line]) || Line <- binary:split(chomp(Data), <<"\n">>, [global]) ];
+log(stderr, Data) ->
+	[ lager:error("~s", [Line]) || Line <- binary:split(chomp(Data), <<"\n">>, [global]) ].
