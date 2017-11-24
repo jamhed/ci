@@ -24,10 +24,12 @@ function set_status() {
 if [ $REPO = "ezuce/reach3" ] && [ $BRANCH = "refs/heads/master" ]
 then
 	ID=$(create_deployment)
+	set_status $ID pending
 	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
 elif [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
 then
 	ID=$(create_deployment)
+	set_status $ID pending
 	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
 else
 	echo skip $REPO $BRANCH
