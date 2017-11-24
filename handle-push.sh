@@ -21,7 +21,7 @@ function set_status() {
 	[ -n $COMMIT ] && curl -s -X POST \
 		-H "Content-Type: application/json" \
 		-d "{ \"state\": \"$2\", \"description\": \"Docker Deploy\", \"target_url\": \"https://docker.ezuce.com/ci/reports/$COMMIT\" }" \
-		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN"
+		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN" | jq '.state'
 }
 
 if [ $REPO = "ezuce/reach3" ] && [ $BRANCH = "refs/heads/master" ]
