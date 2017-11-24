@@ -15,7 +15,7 @@ unset NODE
 function create_deployment() {
 	curl -s -X POST \
 		-H "Content-Type: application/json" \
-		-d "{ \"ref\": \"$REPO-$PR\", \"payload\": \"Docker Deploy\", \"auto_merge\": false }" \
+		-d "{ \"ref\": \"$COMMIT\", \"payload\": \"Docker Deploy\", \"auto_merge\": false }" \
 		"https://api.github.com/repos/$REPO/deployments?access_token=$TOKEN" | jq '.id'
 }
 
