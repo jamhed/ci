@@ -35,36 +35,26 @@ handle_push(Data) ->
 	Repo = path([repository, full_name], Data),
 	Branch = path([ref], Data),
 	Commit = path(['after'], Data),
-	handle_push(Repo, Branch, Commit, Data).
-
-handle_push(Repo, Branch, Commit, _Data) ->
-	Pid = erlang:whereis(ci_logger),
-	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s", [ci_path(), Repo, Branch, Commit]), [{stderr, Pid}, {stdout, Pid}]),
+	handle_push(Repo, Branch, Commit, Data),
 	{ok, <<"ok">>}.
 
 handle_pr(Data) ->
-	Repo = path([pull_request, base, repo, name], Data),
+	Repo = path([pull_request, base, repo, full_name], Data),
 	Action = path([action], Data),
 	Pr = path([pull_request, number], Data),
-	handle_pr_action(Action, Repo, Pr, Data),
+	Commit = path([pull_request, head, sha], Data),
+	handle_pr(Action, Repo, Pr, Commit, Data),
 	{ok, <<"ok">>}.
 
-handle_pr_action(Action, <<"reach3">>, Pr, Data) when Action =:= <<"opened">>; Action =:= <<"synchronize">> ->
-	Commit = path([pull_request, head, sha], Data),
-	lager:notice("build and test reach3 pr:~p commit:~p", [Pr, Commit]),
+handle_push(Repo, Branch, Commit, _Data) ->
+	lager:notice("push repo:~s branch:~s commit:~s", [Repo, Branch, Commit]),
 	Pid = erlang:whereis(ci_logger),
-	exec:run(fmt("cd ~s && ./build-pr.sh ~p ~s", [ci_path(), Pr, Commit]), [{stdout, pr_path(Pr)}, {stderr, Pid}]),
-	ok;
+	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s", [ci_path(), Repo, Branch, Commit]), [{stderr, Pid}, {stdout, Pid}]).
 
-handle_pr_action(<<"closed">>, Repo, Pr, _Data) ->
-	lager:notice("close pr:~p repo:~s", [Pr, Repo]),
+handle_pr(Action, Repo, Pr, Commit, _Data) ->
+	lager:notice("~s pr:~p repo:~s", [Action, Pr, Repo]),
 	Pid = erlang:whereis(ci_logger),
-	exec:run(fmt("cd ~s && ./close-pr.sh ~p ~s", [ci_path(), Pr, Repo]), [{stderr, Pid}, {stdout, Pid}]),
-	ok;
-
-handle_pr_action(Action, Repo, Pr, _Data) ->
-	lager:notice("action:~p repo:~p pr:~p", [Action, Repo, Pr]),
-	ok.
+	exec:run(fmt("cd ~s && ./handle-pr.sh ~s ~p ~s ~s", [ci_path(), Action, Pr, Repo, Commit]), [{stderr, Pid}, {stdout, Pid}]).
 
 path(_, undefined) -> undefined;
 path([], M) -> M;

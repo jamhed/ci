@@ -2,6 +2,9 @@
 REPO=$1
 BRANCH=$2
 COMMIT=$3
+
+echo handle push repo:$REPO branch:$BRANCH commit:$COMMIT
+
 [ -z $BRANCH ] && exit
 
 unset NAME
