@@ -22,7 +22,7 @@ function create_deployment() {
 function set_status() {
 	curl -s -X POST \
 		-H "Content-Type: application/json" \
-		-d "{ \"state\": \"$2\", \"context\": \"Docker Deploy\" }" \
+		-d "{ \"state\": \"$2\", \"description\": \"Docker Deploy\" }" \
 		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN"
 }
 
