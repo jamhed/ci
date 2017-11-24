@@ -7,7 +7,7 @@ COMMIT=$4
 echo handle pr action:$ACTION pr:$PR repo:$REPO commit:$COMMIT
 
 [ -z $PR ] && exit
-[ $ACTION = "closed" ] && exit
+[ $ACTION != "closed" ] && exit
 
 unset NAME
 unset NODE
