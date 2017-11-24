@@ -5,12 +5,12 @@
 fmt(Tmpl, Args) -> lists:flatten(io_lib:format(Tmpl, Args)).
 
 ci_path() -> fmt("~s/ci", [os:getenv("HOME")]).
-path() -> fmt("~s/commit", [os:getenv("HOME")]).
-path(Commit) -> fmt("~s/commit/~s", [os:getenv("HOME"), Commit]).
+path() -> fmt("~s/reports", [os:getenv("HOME")]).
+path(Commit) -> fmt("~s/reports/~s", [os:getenv("HOME"), Commit]).
 
-init(#{ method := <<"GET">>, path := <<"/commit/", Commit/binary>> }=Req0, _InitState) ->
+init(#{ method := <<"GET">>, path := <<"/reports/", Commit/binary>> }=Req0, _InitState) ->
 	Report = path(Commit),
-	lager:notice("get commit report:~p", [Report]),
+	lager:notice("get report:~p", [Report]),
 	{ok, cowboy_req:reply(200, #{ <<"content-type">> => <<"text/plain">>}, {sendfile, 0, filelib:file_size(Report), Report}, Req0), _InitState};
 
 init(#{ method := <<"POST">> }=Req0, _InitState) ->
