@@ -31,6 +31,7 @@ then
 	export NETWORK=devel
 	export BRANCH=$BRANCH
 	export HUB=$BRANCH
+	export NAME=reach-ui-$BRANCH.$NETWORK
 	cd ~/docker/reach-ui && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
 else
 	echo skip $REPO $BRANCH
