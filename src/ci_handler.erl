@@ -44,7 +44,7 @@ handle_pr(Data) ->
 	Action = path([action], Data),
 	Pr = path([pull_request, number], Data),
 	Commit = path([pull_request, head, sha], Data),
-	handle_pr(Action, Repo, Pr, Commit, Branch, Data),
+	handle_pr(Action, Repo, Branch, Pr, Commit, Data),
 	{ok, <<"ok">>}.
 
 handle_push(Repo, Branch, Commit, _Data) ->
