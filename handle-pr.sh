@@ -2,9 +2,10 @@
 ACTION=$1
 PR=$2
 REPO=$3
-COMMIT=$4
+BRANCH=$4
+COMMIT=$5
 
-echo handle pr action:$ACTION pr:$PR repo:$REPO commit:$COMMIT
+echo handle pr action:$ACTION pr:$PR repo:$REPO branch:$BRANCH commit:$COMMIT
 
 [ -z $PR ] && exit
 [ $ACTION != "closed" ] && exit
