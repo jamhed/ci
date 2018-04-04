@@ -1,7 +1,7 @@
 #!/bin/bash -e
 REPO=$1
-BRANCH=$2
 COMMIT=$3
+BRANCH=$(sed -e 's/refs\/heads\///' $2)
 
 echo handle push repo:$REPO branch:$BRANCH commit:$COMMIT
 
@@ -29,7 +29,7 @@ then
 	ID=$(create_deployment)
 	set_status $ID pending
 	export NETWORK=devel
-	export BRANCH=jamhed-devel
+	export BRANCH=$BRANCH
 	export HUB=$BRANCH
 	cd ~/docker/reach-ui && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
 else
