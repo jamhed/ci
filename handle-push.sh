@@ -24,7 +24,7 @@ function set_status() {
 		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN" | jq '.state'
 }
 
-if [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
+if [ $REPO = "swarmcom/reach-ui" ]
 then
 	ID=$(create_deployment)
 	set_status $ID pending
