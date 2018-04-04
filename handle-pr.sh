@@ -27,13 +27,8 @@ function set_status() {
 		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN" | jq '.state'
 }
 
-if [ $REPO = "ezuce/reach3" ]
-then
-	NETWORK=pr-$PR
-	docker stop $(docker ps -q -f "name=.$NETWORK")
-	docker rm $(docker ps -a -q -f "name=.$NETWORK")
-	docker rmi $(docker images -q -f "reference=$NETWORK/*")
-fi
+export NETWORK=$BRANCH
+export BRANCH=$BRANCH
 
 if [ $REPO = "ezuce/reach3" ]
 then
