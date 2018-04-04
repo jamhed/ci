@@ -40,19 +40,20 @@ handle_push(Data) ->
 
 handle_pr(Data) ->
 	Repo = path([pull_request, base, repo, full_name], Data),
+	Branch = path([pull_request, base, ref], Data),
 	Action = path([action], Data),
 	Pr = path([pull_request, number], Data),
 	Commit = path([pull_request, head, sha], Data),
-	handle_pr(Action, Repo, Pr, Commit, Data),
+	handle_pr(Action, Repo, Pr, Commit, Branch, Data),
 	{ok, <<"ok">>}.
 
 handle_push(Repo, Branch, Commit, _Data) ->
 	lager:notice("push repo:~s branch:~s commit:~s", [Repo, Branch, Commit]),
 	exec:run(fmt("cd ~s && ./handle-push.sh ~s ~s ~s", [ci_path(), Repo, Branch, Commit]), make_writer(Commit)).
 
-handle_pr(Action, Repo, Pr, Commit, _Data) ->
-	lager:notice("~s pr:~p repo:~s", [Action, Pr, Repo]),
-	exec:run(fmt("cd ~s && ./handle-pr.sh ~s ~p ~s ~s", [ci_path(), Action, Pr, Repo, Commit]), make_writer(Commit)).
+handle_pr(Action, Repo, Branch, Pr, Commit, _Data) ->
+	lager:notice("~s pr:~p repo:~s branch:~s", [Action, Pr, Repo, Branch]),
+	exec:run(fmt("cd ~s && ./handle-pr.sh ~s ~p ~s ~s ~s", [ci_path(), Action, Pr, Repo, Branch, Commit]), make_writer(Commit)).
 
 path(_, undefined) -> undefined;
 path([], M) -> M;
