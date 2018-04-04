@@ -1,7 +1,7 @@
 #!/bin/bash -e
 REPO=$1
 COMMIT=$3
-BRANCH=$(sed -e 's/refs\/heads\///' $2)
+BRANCH=$(echo $2 | sed -e 's/refs\/heads\///' -)
 
 echo handle push repo:$REPO branch:$BRANCH commit:$COMMIT
 
