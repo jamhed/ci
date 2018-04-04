@@ -24,16 +24,14 @@ function set_status() {
 		"https://api.github.com/repos/$REPO/deployments/$1/statuses?access_token=$TOKEN" | jq '.state'
 }
 
-if [ $REPO = "ezuce/reach3" ] && [ $BRANCH = "refs/heads/master" ]
+if [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
 then
 	ID=$(create_deployment)
 	set_status $ID pending
-	cd ~/docker/reach3 && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
-elif [ $REPO = "swarmcom/reach-ui" ] && [ $BRANCH = "refs/heads/jamhed-devel" ]
-then
-	ID=$(create_deployment)
-	set_status $ID pending
-	cd ~/docker/reach-ui-jh && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
+	export NETWORK=devel
+	export BRANCH=jamhed-devel
+	export HUB=$BRANCH
+	cd ~/docker/reach-ui && ./build.sh && ./run.sh && set_status $ID success || set_status $ID error
 else
 	echo skip $REPO $BRANCH
 fi
