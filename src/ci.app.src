@@ -1,6 +1,6 @@
 {application, ci,
 [
-	{description, "Reach CI"},
+	{description, "ErlCI"},
 	{vsn, "1.0"},
 	{registered, []},
 	{applications, [
@@ -12,6 +12,6 @@
 		cowboy
 	]},
 	{modules, []},
-	{mod, { ci_app, []}},
+	{mod, { ci_app, [] }},
 	{env, []}
 ]}.
