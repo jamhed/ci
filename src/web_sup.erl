@@ -17,6 +17,7 @@ dispatch_rules() ->
 	cowboy_router:compile([
 		{'_', [
 			{"/", cowboy_static, {priv_file, ci, "index.html"}},
+			{"/github", github_handler, []},
 			{"/ws", ws_main, []},
 			{"/static/[...]", cowboy_static, {priv_dir, ci, "static"}}
 		]}

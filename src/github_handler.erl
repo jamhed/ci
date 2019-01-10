@@ -1,15 +1,17 @@
--module(ci_handler).
+-module(github_handler).
 -export([init/2]).
 -record(state, {}).
 
 init(#{ method := <<"POST">> }=Req0, _InitState) ->
 	{ok, Data, Req} = cowboy_req:read_body(Req0),
-	Request = cowboy_req:header(<<"x-github-event">>, Req),
-	handle_reply(handle_request(Request, jiffy:decode(Data, [return_maps])), Req, #state{}).
+	Event = cowboy_req:header(<<"x-github-event">>, Req),
+	handle_reply(handle_request(Event, jiffy:decode(Data, [return_maps])), Req, #state{}).
 
 handle_request(<<"pull_request">>, Data) -> handle_pr(Data);
 handle_request(<<"push">>, Data) -> handle_push(Data);
-handle_request(Request, _) -> lager:warning("unhandled request:~p", [Request]).
+handle_request(Event, _) ->
+	lager:warning("unhandled event:~p", [Event]),
+	{ok, <<"undefined">>}.
 
 handle_reply({ok, Data}, Req0, S=#state{}) ->
 	{ok, cowboy_req:reply(200, #{}, Data, Req0), S};
