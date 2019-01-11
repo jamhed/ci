@@ -11,6 +11,7 @@ start_link() ->
 
 init([]) ->
 	lager:notice("start"),
+	ci_db:setup(),
 	Children = [
 		?CHILDS(web_sup, web_sup, [])
 	],
