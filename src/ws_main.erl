@@ -34,11 +34,30 @@ websocket_info({'DOWN', _Ref, process, _Pid, _Reason}, S=#ws_state{peer=Peer, us
 	lager:notice("~s user_id:~w is dead pid:~p reason:~p, stop ws", [Peer, UserId, _Pid, _Reason]),
 	{stop, S};
 
-websocket_info(stop, S=#ws_state{}) ->
-	{stop, S}.
+websocket_info(stop, S=#ws_state{peer=Peer, user_id=UserId}) ->
+	lager:notice("~s user_id:~w logout", [Peer, UserId]),
+	{stop, S};
 
-terminate(Reason, _Req, #ws_state{peer=Peer, user_id=UserId}) ->
-	lager:notice("~s user_id:~w terminate, reason:~p", [Peer, UserId, Reason]),
+websocket_info(Info, S=#ws_state{peer=Peer, user_id=UserId}) ->
+	try
+		ws_user:websocket_info(Info, S) of
+			ok -> {ok, S};
+			stop -> {stop, S};
+			{stop, M} when is_map(M) ->
+				erlang:send_after(100, self(), stop),
+				{reply, {text, encode(M)}, S};
+			M when is_map(M) ->
+				lager:info("~s user_id:~w event ~p", [Peer, UserId, M]),
+				{reply, {text, encode(M)}, S}
+	catch
+		C:E ->
+			lager:error("error handle event: ~p~n~s", [Info, lager:pr_stacktrace(erlang:get_stacktrace(), {C, E})]),
+			erlang:error(websocket_error), % crash deliberately to make errors visible to the ui
+			{ok, S}
+	end.
+
+terminate(Reason, _Req, S) ->
+	lager:debug("terminate, reason:~p, state:~p", [Reason, S]),
 	ok.
 
 handle_msg(#{ <<"type">> := <<"call">>, <<"args">> := [M, F, A], <<"id">> := Id }, S=#ws_state{}) when is_list(A) ->
