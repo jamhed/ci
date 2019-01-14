@@ -8,6 +8,11 @@ login(<<"master">>=L, _Password, S=#ws_state{peer=Peer}) ->
 	UserId = master,
 	gproc:reg({p, l, {ws, UserId}}, l2b(Peer)),
 	self() ! {auth, #{ name => UserId }},
+	{reply, #{ login => L, name => L }, S#ws_state{user_id=UserId}};
+login(<<"admin">>=L, _Password, S=#ws_state{peer=Peer}) ->
+	UserId = admin,
+	gproc:reg({p, l, {ws, UserId}}, l2b(Peer)),
+	self() ! {auth, #{ name => UserId, role => admin }},
 	{reply, #{ login => L, name => L }, S#ws_state{user_id=UserId}}.
 
 logout(#ws_state{}) -> self() ! logout.
