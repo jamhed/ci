@@ -1,0 +1,191 @@
+{
+  "ref": "refs/heads/master",
+  "before": "0afd4a28f2828a300fe84b0959ed7dca850fc163",
+  "after": "19bd2cabaca737f01adad4e970ad1d4fc6fb26c8",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/jamhed/ci/compare/0afd4a28f282...19bd2cabaca7",
+  "commits": [
+    {
+      "id": "19bd2cabaca737f01adad4e970ad1d4fc6fb26c8",
+      "tree_id": "8265bcc6eee2d8f09fa28c4c0bca6dde3c179da3",
+      "distinct": true,
+      "message": "User session management (allow reload)",
+      "timestamp": "2019-01-14T06:30:57+01:00",
+      "url": "https://github.com/jamhed/ci/commit/19bd2cabaca737f01adad4e970ad1d4fc6fb26c8",
+      "author": {
+        "name": "Roman Galeev",
+        "email": "ip@ncom-ufa.ru",
+        "username": "jamhed"
+      },
+      "committer": {
+        "name": "Roman Galeev",
+        "email": "ip@ncom-ufa.ru",
+        "username": "jamhed"
+      },
+      "added": [
+        "src/ws_session.erl"
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "rebar.config",
+        "src/api/ws_user.erl",
+        "src/ci_sup.erl"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "19bd2cabaca737f01adad4e970ad1d4fc6fb26c8",
+    "tree_id": "8265bcc6eee2d8f09fa28c4c0bca6dde3c179da3",
+    "distinct": true,
+    "message": "User session management (allow reload)",
+    "timestamp": "2019-01-14T06:30:57+01:00",
+    "url": "https://github.com/jamhed/ci/commit/19bd2cabaca737f01adad4e970ad1d4fc6fb26c8",
+    "author": {
+      "name": "Roman Galeev",
+      "email": "ip@ncom-ufa.ru",
+      "username": "jamhed"
+    },
+    "committer": {
+      "name": "Roman Galeev",
+      "email": "ip@ncom-ufa.ru",
+      "username": "jamhed"
+    },
+    "added": [
+      "src/ws_session.erl"
+    ],
+    "removed": [
+
+    ],
+    "modified": [
+      "rebar.config",
+      "src/api/ws_user.erl",
+      "src/ci_sup.erl"
+    ]
+  },
+  "repository": {
+    "id": 102632201,
+    "node_id": "MDEwOlJlcG9zaXRvcnkxMDI2MzIyMDE=",
+    "name": "ci",
+    "full_name": "jamhed/ci",
+    "private": false,
+    "owner": {
+      "name": "jamhed",
+      "email": "jamhedd@gmail.com",
+      "login": "jamhed",
+      "id": 280716,
+      "node_id": "MDQ6VXNlcjI4MDcxNg==",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/280716?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jamhed",
+      "html_url": "https://github.com/jamhed",
+      "followers_url": "https://api.github.com/users/jamhed/followers",
+      "following_url": "https://api.github.com/users/jamhed/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jamhed/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jamhed/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jamhed/subscriptions",
+      "organizations_url": "https://api.github.com/users/jamhed/orgs",
+      "repos_url": "https://api.github.com/users/jamhed/repos",
+      "events_url": "https://api.github.com/users/jamhed/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jamhed/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "html_url": "https://github.com/jamhed/ci",
+    "description": null,
+    "fork": false,
+    "url": "https://github.com/jamhed/ci",
+    "forks_url": "https://api.github.com/repos/jamhed/ci/forks",
+    "keys_url": "https://api.github.com/repos/jamhed/ci/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/jamhed/ci/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/jamhed/ci/teams",
+    "hooks_url": "https://api.github.com/repos/jamhed/ci/hooks",
+    "issue_events_url": "https://api.github.com/repos/jamhed/ci/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/jamhed/ci/events",
+    "assignees_url": "https://api.github.com/repos/jamhed/ci/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/jamhed/ci/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/jamhed/ci/tags",
+    "blobs_url": "https://api.github.com/repos/jamhed/ci/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/jamhed/ci/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/jamhed/ci/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/jamhed/ci/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/jamhed/ci/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/jamhed/ci/languages",
+    "stargazers_url": "https://api.github.com/repos/jamhed/ci/stargazers",
+    "contributors_url": "https://api.github.com/repos/jamhed/ci/contributors",
+    "subscribers_url": "https://api.github.com/repos/jamhed/ci/subscribers",
+    "subscription_url": "https://api.github.com/repos/jamhed/ci/subscription",
+    "commits_url": "https://api.github.com/repos/jamhed/ci/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/jamhed/ci/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/jamhed/ci/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/jamhed/ci/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/jamhed/ci/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/jamhed/ci/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/jamhed/ci/merges",
+    "archive_url": "https://api.github.com/repos/jamhed/ci/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/jamhed/ci/downloads",
+    "issues_url": "https://api.github.com/repos/jamhed/ci/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/jamhed/ci/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/jamhed/ci/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/jamhed/ci/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/jamhed/ci/labels{/name}",
+    "releases_url": "https://api.github.com/repos/jamhed/ci/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/jamhed/ci/deployments",
+    "created_at": 1504715243,
+    "updated_at": "2019-01-14T05:03:53Z",
+    "pushed_at": 1547443866,
+    "git_url": "git://github.com/jamhed/ci.git",
+    "ssh_url": "git@github.com:jamhed/ci.git",
+    "clone_url": "https://github.com/jamhed/ci.git",
+    "svn_url": "https://github.com/jamhed/ci",
+    "homepage": null,
+    "size": 39,
+    "stargazers_count": 0,
+    "watchers_count": 0,
+    "language": "Erlang",
+    "has_issues": true,
+    "has_projects": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "has_pages": false,
+    "forks_count": 0,
+    "mirror_url": null,
+    "archived": false,
+    "open_issues_count": 0,
+    "license": null,
+    "forks": 0,
+    "open_issues": 0,
+    "watchers": 0,
+    "default_branch": "master",
+    "stargazers": 0,
+    "master_branch": "master"
+  },
+  "pusher": {
+    "name": "jamhed",
+    "email": "jamhedd@gmail.com"
+  },
+  "sender": {
+    "login": "jamhed",
+    "id": 280716,
+    "node_id": "MDQ6VXNlcjI4MDcxNg==",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/280716?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jamhed",
+    "html_url": "https://github.com/jamhed",
+    "followers_url": "https://api.github.com/users/jamhed/followers",
+    "following_url": "https://api.github.com/users/jamhed/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jamhed/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jamhed/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jamhed/subscriptions",
+    "organizations_url": "https://api.github.com/users/jamhed/orgs",
+    "repos_url": "https://api.github.com/users/jamhed/repos",
+    "events_url": "https://api.github.com/users/jamhed/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jamhed/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}
