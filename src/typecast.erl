@@ -1,5 +1,5 @@
 -module(typecast).
--export([l2b/1, b2l/1, b2a/1, b2ea/1, b2i/1, i2b/1, fmt/2, b2o/1, b2bool/1, b2int/1, b2float/1, b2list/1, b2b/1, keys_to_atoms/1]).
+-export([l2b/1, a2b/1, b2l/1, b2a/1, b2ea/1, b2i/1, i2b/1, fmt/2, b2o/1, b2bool/1, b2int/1, b2float/1, b2list/1, b2b/1, keys_to_atoms/1]).
 
 b2l(L) -> erlang:binary_to_list(L).
 
@@ -7,6 +7,9 @@ b2ea(B) when is_binary(B) -> erlang:binary_to_existing_atom(B, utf8).
 
 b2a(B) when is_binary(B) -> erlang:binary_to_atom(B, utf8);
 b2a(B) -> B.
+
+a2b(A) when is_atom(A) -> erlang:atom_to_binary(A, utf8);
+a2b(A) -> A.
 
 i2b(I) when is_integer(I) -> erlang:integer_to_binary(I);
 i2b(I) -> I.

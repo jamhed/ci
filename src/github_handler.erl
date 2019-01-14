@@ -7,7 +7,6 @@ init(#{ method := <<"POST">> }=Req0, _InitState) ->
 	Event = cowboy_req:header(<<"x-github-event">>, Req),
 	handle_reply(handle_request(Event, jiffy:decode(Data, [return_maps])), Req, #state{}).
 
-handle_request(<<"pull_request">>, Data) -> handle_pr(Data);
 handle_request(<<"push">>, Data) -> handle_push(Data);
 handle_request(Event, _) ->
 	lager:warning("unhandled event:~p", [Event]),
@@ -20,33 +19,5 @@ handle_reply(ok, Req0, S=#state{}) ->
 	{ok, cowboy_req:reply(404, #{}, <<>>, Req0), S}.
 
 handle_push(Data) ->
-	Repo = path([repository, full_name], Data),
-	Branch = path([ref], Data),
-	Commit = path(['after'], Data),
-	handle_push(Repo, Branch, Commit, Data),
+	github_db:handle_push(Data),
 	{ok, <<"ok">>}.
-
-handle_pr(Data) ->
-	Repo = path([pull_request, base, repo, full_name], Data),
-	Branch = path([pull_request, base, ref], Data),
-	Action = path([action], Data),
-	Pr = path([pull_request, number], Data),
-	Commit = path([pull_request, head, sha], Data),
-	handle_pr(Action, Repo, Branch, Pr, Commit, Data),
-	{ok, <<"ok">>}.
-
-handle_push(Repo, Branch, _Commit, _Data) ->
-	lager:notice("push repo:~s branch:~s commit:~s", [Repo, Branch, _Commit]),
-	exec:run("").
-
-handle_pr(Action, Repo, Branch, Pr, _Commit, _Data) ->
-	lager:notice("~s pr:~p repo:~s branch:~s", [Action, Pr, Repo, Branch]),
-	exec:run("").
-
-path(_, undefined) -> undefined;
-path([], M) -> M;
-path([K|Rest], M) -> path(Rest, maps:get(a2b(K), M, undefined)).
-
-a2b(A) when is_atom(A) -> erlang:atom_to_binary(A, utf8);
-a2b(A) -> A.
-

@@ -5,5 +5,6 @@
 
 -include_lib("include/user.hrl").
 -include_lib("include/repo.hrl").
+-include_lib("include/commit.hrl").
 
 -endif.

@@ -1,7 +1,7 @@
 -module(ci_db).
 -import(typecast, [fmt/2]).
 -include_lib("stdlib/include/qlc.hrl").
--include_lib("include/user.hrl").
+-include_lib("include/db.hrl").
 
 -export([
 	setup/0, create_tables/0, setup_mnesia/0,
@@ -10,7 +10,10 @@
 
 tables() ->
 	[
-		{user, [], record_info(fields, user)}
+		{user, [], record_info(fields, user)},
+		{repo, [], record_info(fields, repo)},
+		{commit, [], record_info(fields, commit)},
+		{user_repo, [], record_info(fields, user_repo)}
 	].
 
 create_tables() -> create_tables(tables()).
