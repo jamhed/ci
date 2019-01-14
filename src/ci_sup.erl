@@ -13,7 +13,8 @@ init([]) ->
 	lager:notice("start"),
 	ci_db:setup(),
 	Children = [
-		?CHILDS(web_sup, web_sup, [])
+		?CHILDS(web_sup, web_sup, []),
+		?CHILD(ws_session, ws_session, [])
 	],
 	{ok, { {one_for_one, 5, 10}, Children} }.
 
