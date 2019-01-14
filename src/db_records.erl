@@ -13,7 +13,7 @@ from_map(#{ <<"record">> := Record }=M) ->
 	from_map(erlang:binary_to_atom(Record, utf8), M).
 
 from_map(Rec, M) ->
-	Ma = typecat:keys_to_atoms(M),
+	Ma = typecast:keys_to_atoms(M),
 	L = lists:foldl(
 		fun(Field, List) ->
 			[ from_map_value(Rec, Field, maps:get(Field, Ma)) | List]
