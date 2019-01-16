@@ -1,12 +1,14 @@
 -module(db_records).
--include("include/user.hrl").
+-include("include/db.hrl").
 -import(typecast, [b2ea/1, b2float/1, b2int/1, b2l/1, l2b/1]).
 
 -export([fields/1,
 	from_map/1, from_map/2, as_map/1, to_map/1, enrich_map/1, enrich_map/2
 ]).
 
-fields(user) -> record_info(fields, user).
+fields(user) -> record_info(fields, user);
+fields(repo) -> record_info(fields, repo);
+fields(commit) -> record_info(fields, commit).
 
 from_map(L) when is_list(L) -> [ from_map(M) || M <- L ];
 from_map(#{ <<"record">> := Record }=M) ->

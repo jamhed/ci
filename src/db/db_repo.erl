@@ -1,10 +1,10 @@
 -module(db_repo).
--include("include/repo.hrl").
+-include("include/db.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 -compile({no_auto_import,[get/1]}).
 
 -export([
-	create/3, get/0, get/1, delete/1, update/2
+	create/3, get/0, get/1, delete/1, update/2, getByUserId/1
 ]).
 
 re({atomic, [Re]}) -> Re;
@@ -24,6 +24,11 @@ write(Id, Name, Url) ->
 
 get() ->
 	Q = qlc:q([ A || A=#repo{} <- mnesia:table(repo) ]),
+	{atomic, Re} = mnesia:transaction(fun() -> qlc:e(Q) end),
+	Re.
+
+getByUserId(UserId) ->
+	Q = qlc:q([ A || A=#repo{id=J} <- mnesia:table(repo), #user_repo{repo_id=RepoId, user_id=I} <- mnesia:table(user_repo), I =:= UserId, J =:= RepoId ]),
 	{atomic, Re} = mnesia:transaction(fun() -> qlc:e(Q) end),
 	Re.
 

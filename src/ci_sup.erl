@@ -14,7 +14,8 @@ init([]) ->
 	ci_db:setup(),
 	Children = [
 		?CHILDS(web_sup, web_sup, []),
-		?CHILD(ws_session, ws_session, [])
+		?CHILD(ws_session, ws_session, []),
+		?CHILD(ops_sup, ops_sup, [])
 	],
 	{ok, { {one_for_one, 5, 10}, Children} }.
 
